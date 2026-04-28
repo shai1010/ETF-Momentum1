@@ -2,14 +2,15 @@ name: ETF 动量监控系统
 
 on:
   schedule:
+    # 每天北京时间下午 15:30 自动运行 (对应 UTC 时间 07:30)
     - cron: '30 7 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # 允许你手动点击运行
 
 jobs:
   run-strategy:
     runs-on: ubuntu-latest
     steps:
-      - name: 获取代码
+      - name: 获取仓库代码
         uses: actions/checkout@v3
 
       - name: 配置 Python 环境
@@ -18,8 +19,8 @@ jobs:
           python-version: '3.10'
 
       - name: 安装量化依赖库
-        # 这里多装了一个 efinance，它比 akshare 在云端更稳
-        run: pip install efinance pandas
+        # 这里必须包含 scipy，否则无法计算 R2 评分
+        run: pip install efinance pandas numpy scipy
 
-      - name: 执行策略脚本并输出信号
+      - name: 执行 100% 复刻版策略脚本
         run: python main.py
