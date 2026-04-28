@@ -2,9 +2,8 @@ name: ETF 动量监控系统
 
 on:
   schedule:
-    # 每天北京时间下午 15:30 自动运行 (对应 UTC 时间 07:30)
     - cron: '30 7 * * *'
-  workflow_dispatch: # 允许你手动点击运行
+  workflow_dispatch: 
 
 jobs:
   run-strategy:
@@ -19,7 +18,6 @@ jobs:
           python-version: '3.10'
 
       - name: 安装量化依赖库
-        # 这里必须包含 scipy，否则无法计算 R2 评分
         run: pip install efinance pandas numpy scipy
 
       - name: 执行 100% 复刻版策略脚本
